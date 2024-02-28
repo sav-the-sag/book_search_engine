@@ -63,4 +63,28 @@ const resolvers = {
   
           return updatedUser;
       },
-}
+      // Deletes book from a user's `savedBooks`
+        removeBook: async (parent, args, context) => {
+        const { bookId } = args;
+        const { user } = context;
+      
+        try {
+          // Find the logged-in user based on the context
+          const foundUser = await User.findById(user._id);
+    
+          if (!foundUser) {
+            throw new AuthenticationError('User not found');
+          }
+      
+          foundUser.savedBooks = foundUser.savedBooks.filter(
+            (book) => book.bookId !== bookId
+          );
+      
+          await foundUser.save();
+      
+          return foundUser;
+        } catch (err) {
+          throw new ApolloError('Failed to remove book', 'INTERNAL_SERVER_ERROR');
+        }
+      },
+    };
