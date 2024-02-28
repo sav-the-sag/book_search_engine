@@ -5,6 +5,11 @@ import SavedBooks from './pages/SavedBooks';
 import Navbar from './components/Navbar';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
+const client = new ApolloClient({
+  uri: '/graphql',
+  cache: new InMemoryCache(),
+});
+
 function App() {
   return (
     <>
