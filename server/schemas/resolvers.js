@@ -28,5 +28,28 @@ const resolvers = {
             //* console.log({input});
             return { token, user };
         },
-    }
+    },
+    // Logs in a user
+        login: async (parent, args) => {
+        try {
+            const { username, email, password } = args;
+            const user = await User.findOne({ $or: [{ username }, { email }] });
+
+            if (!user) {
+                throw new Error("User not found");
+            }
+
+            const correctPass = await user.isCorrectPassword(password);
+
+            if (!correctPass) {
+                throw new Error('Incorrect password');
+            }
+
+            const token = signToken(user);
+
+            return { token, user };
+        } catch (err) {
+            throw new Error(err.message);
+        }
+    },
 }
