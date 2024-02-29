@@ -56,6 +56,10 @@ const SignupForm = () => {
     });
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       {/* This is needed for the validation functionality above */}
