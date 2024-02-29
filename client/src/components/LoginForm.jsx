@@ -2,13 +2,19 @@
 import { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { loginUser } from '../utils/API';
+// import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
+// refactored to use GraphQL API instead of RESTful API
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../utils/mutations';
 
 const LoginForm = () => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+
+  // refactored to use GraphQL API instead of RESTful API
+  const [login, { loading }] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -26,7 +32,7 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await loginUser(userFormData);
+      const response = await login(userFormData);
 
       if (!response.ok) {
         throw new Error('something went wrong!');
